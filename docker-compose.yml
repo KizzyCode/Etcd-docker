@@ -1,0 +1,16 @@
+services:
+  etcd:
+    build: .
+    healthcheck:
+      test: ["CMD", "/usr/bin/etcdctl", "--dial-timeout=3s", "--command-timeout=3s", "endpoint", "health"]
+      start_period: 15s
+      interval: 10s
+      timeout: 10s
+      retries: 2
+    ports:
+      - 127.0.0.1:2379:2379/tcp
+    volumes:
+      - ./state:/var/etcd:rw
+    environment:
+      ETCD_LOG_LEVEL: debug
+      ETCD_NAME: etcd
